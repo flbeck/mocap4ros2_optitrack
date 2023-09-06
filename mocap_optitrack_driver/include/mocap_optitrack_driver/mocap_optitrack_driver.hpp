@@ -89,6 +89,9 @@ protected:
   void control_stop(const mocap_control_msgs::msg::Control::SharedPtr msg) override;
 
   NatNetClient * client;
+
+  std::chrono::nanoseconds get_optitrack_system_latency(sFrameOfMocapData * data);
+
   sNatNetClientConnectParams client_params;
   sServerDescription server_description;
   sDataDescriptions * data_descriptions{nullptr};
