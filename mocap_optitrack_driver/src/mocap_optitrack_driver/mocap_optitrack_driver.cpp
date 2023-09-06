@@ -27,6 +27,10 @@
 #include "mocap_optitrack_driver/mocap_optitrack_driver.hpp"
 #include "lifecycle_msgs/msg/state.hpp"
 
+#include <tf2/LinearMath/Transform.h>
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
+
 namespace mocap_optitrack_driver
 {
 
@@ -121,11 +125,13 @@ OptitrackDriverNode::process_frame(sFrameOfMocapData * data)
       int modelID, markerID;
       NatNet_DecodeID(marker_data.ID, &modelID, &markerID);
 
+      // transform pose to ROS coordinates (z up, x forward, y left)
+
       mocap_msgs::msg::Marker marker;
       marker.id_type = mocap_msgs::msg::Marker::USE_INDEX;
       marker.marker_index = i;
-      marker.translation.x = marker_data.x;
-      marker.translation.y = marker_data.y;
+      marker.translation.x = -marker_data.y;
+      marker.translation.y = marker_data.x;
       marker.translation.z = marker_data.z;
       if (ActiveMarker || Unlabeled) {
         msg.markers.push_back(marker);
@@ -145,12 +151,12 @@ OptitrackDriverNode::process_frame(sFrameOfMocapData * data)
     for (int i = 0; i < data->nRigidBodies; i++) {
       mocap_msgs::msg::RigidBody rb;
 
-      rb.rigid_body_name = std::to_string(data->RigidBodies[i].ID);
-      rb.pose.position.x = data->RigidBodies[i].x;
-      rb.pose.position.y = data->RigidBodies[i].y;
+      // transform pose to ROS coordinates (z up, x forward, y left)
+      rb.pose.position.x = -data->RigidBodies[i].y;
+      rb.pose.position.y = data->RigidBodies[i].x;
       rb.pose.position.z = data->RigidBodies[i].z;
       rb.pose.orientation.x = data->RigidBodies[i].qx;
-      rb.pose.orientation.y = data->RigidBodies[i].qy;
+      rb.pose.orientation.y = -data->RigidBodies[i].qy;
       rb.pose.orientation.z = data->RigidBodies[i].qz;
       rb.pose.orientation.w = data->RigidBodies[i].qw;
       rb.markers = marker2rb[data->RigidBodies[i].ID];

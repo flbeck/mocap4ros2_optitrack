@@ -38,6 +38,7 @@
 
 #include "std_msgs/msg/empty.hpp"
 #include "geometry_msgs/msg/pose_stamped.hpp"
+#include <geometry_msgs/msg/pose.hpp>
 
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp/node_interfaces/node_logging.hpp"
