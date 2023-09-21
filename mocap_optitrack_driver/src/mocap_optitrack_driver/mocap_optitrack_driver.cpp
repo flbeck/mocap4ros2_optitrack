@@ -183,8 +183,8 @@ OptitrackDriverNode::process_frame(sFrameOfMocapData * data)
       rb.pose.position.x = -data->RigidBodies[i].y;
       rb.pose.position.y = data->RigidBodies[i].x;
       rb.pose.position.z = data->RigidBodies[i].z;
-      rb.pose.orientation.x = data->RigidBodies[i].qx;
-      rb.pose.orientation.y = -data->RigidBodies[i].qy;
+      rb.pose.orientation.x = -data->RigidBodies[i].qy;
+      rb.pose.orientation.y = data->RigidBodies[i].qx;
       rb.pose.orientation.z = data->RigidBodies[i].qz;
       rb.pose.orientation.w = data->RigidBodies[i].qw;
       rb.rigid_body_name = std::to_string(data->RigidBodies[i].ID);
